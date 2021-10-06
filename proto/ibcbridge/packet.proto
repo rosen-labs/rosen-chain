@@ -4,14 +4,6 @@ package rosenlabs.rosenchain.ibcbridge;
 option go_package = "github.com/rosen-labs/rosenchain/x/ibcbridge/types";
 
 message IbcbridgePacketData {
-    message MsgMintRequest {
-        string reciever = 1;
-        uint64 amount = 2;
-        uint64 fee = 3;
-        uint32 tokenId = 4;
-        uint32 src_chain_id = 5;
-        uint32 dest_chain_id = 6;
-    }
     
     oneof packet {
         MsgMintRequest mintRequest = 1;
@@ -19,5 +11,13 @@ message IbcbridgePacketData {
     }
 }
 
+message MsgMintRequest {
+    string reciever = 1;
+    uint64 amount = 2;
+    uint64 fee = 3;
+    uint32 tokenId = 4;
+    uint32 src_chain_id = 5;
+    uint32 dest_chain_id = 6;
+}
 
 // this line is used by starport scaffolding # ibc/packet/proto/message

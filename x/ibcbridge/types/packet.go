@@ -5,24 +5,24 @@ import (
 )
 
 // Route ...
-func (m *IbcbridgePacketData_MsgMintRequest) Route() string {
-	return "xchain"
+func (m *MsgMintRequest) Route() string {
+	return "ibcbridge"
 }
 
 // Type ...
-func (m *IbcbridgePacketData_MsgMintRequest) Type() string {
-	return "BridgeRequest"
+func (m *MsgMintRequest) Type() string {
+	return "MsgMintRequest"
 }
 
-func (m *IbcbridgePacketData_MsgMintRequest) ValidateBasic() error {
+func (m *MsgMintRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *IbcbridgePacketData_MsgMintRequest) GetSignBytes() []byte {
+func (m *MsgMintRequest) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(m)
 	return sdk.MustSortJSON(bz)
 }
 
-func (m *IbcbridgePacketData_MsgMintRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgMintRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{}
 }
