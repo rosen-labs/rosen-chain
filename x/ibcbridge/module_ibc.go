@@ -141,6 +141,9 @@ func (am AppModule) OnRecvPacket(
 	// Dispatch packet
 	switch packet := modulePacketData.Packet.(type) {
 	// this line is used by starport scaffolding # ibc/packet/module/recv
+	case *types.IbcbridgePacketData_MintRequest:
+		result, err := handleMsgBridgeRequest(ctx, am.keeper, packet.MintRequest)
+		return result, []byte{}, err
 	default:
 		errMsg := fmt.Sprintf("unrecognized %s packet type: %T", types.ModuleName, packet)
 		return nil, []byte{}, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
