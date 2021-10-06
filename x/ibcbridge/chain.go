@@ -65,16 +65,16 @@ func (e CosmosDenomEndpoint) Mint(
 	return nil
 }
 
-var chainMap ChainMap
+var chainMap = make(ChainMap)
 
 func init() {
-	chainMap[0] = Chain{ChainName: "Etherium", ChainId: 0}
+	chainMap[0] = Chain{ChainName: "Etherium", ChainId: 0, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
 	chainMap[0].TokenEndpointMap[0] = ContractEndpoint{
 		TokenName:       "x",
 		ContractAddress: "0x9f834f87we023jf",
 	}
 
-	chainMap[1] = Chain{ChainName: "XChain", ChainId: 1}
+	chainMap[1] = Chain{ChainName: "XChain", ChainId: 1, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
 	chainMap[1].TokenEndpointMap[0] = CosmosDenomEndpoint{
 		TokenName: "x",
 		Denom:     "token",
