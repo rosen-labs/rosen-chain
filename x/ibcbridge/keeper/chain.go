@@ -1,10 +1,9 @@
-package ibcbridge
+package keeper
 
 import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/rosen-labs/rosenchain/x/ibcbridge/keeper"
 )
 
 type ChainMap map[uint32]Chain
@@ -26,7 +25,7 @@ func (c Chain) GetTokenEndpointById(id uint32) TokenEndpoint {
 type TokenEndpoint interface {
 	Mint(
 		ctx sdk.Context,
-		k keeper.Keeper,
+		k Keeper,
 		reciever string,
 		amount uint64,
 		fee uint64,
@@ -40,7 +39,7 @@ type ContractEndpoint struct {
 
 func (e ContractEndpoint) Mint(
 	ctx sdk.Context,
-	k keeper.Keeper,
+	k Keeper,
 	reciever string,
 	amount uint64,
 	fee uint64,
@@ -57,7 +56,7 @@ type CosmosDenomEndpoint struct {
 
 func (e CosmosDenomEndpoint) Mint(
 	ctx sdk.Context,
-	k keeper.Keeper,
+	k Keeper,
 	reciever string,
 	amount uint64,
 	fee uint64,

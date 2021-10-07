@@ -24,7 +24,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type IbcbridgePacketData struct {
 	// Types that are valid to be assigned to Packet:
-	//	*IbcbridgePacketData_MintRequest
+	//	*IbcbridgePacketData_NoData
+	//	*IbcbridgePacketData_MsgMintRequestPacket
 	Packet isIbcbridgePacketData_Packet `protobuf_oneof:"packet"`
 }
 
@@ -67,11 +68,15 @@ type isIbcbridgePacketData_Packet interface {
 	Size() int
 }
 
-type IbcbridgePacketData_MintRequest struct {
-	MintRequest *MsgMintRequest `protobuf:"bytes,1,opt,name=mintRequest,proto3,oneof" json:"mintRequest,omitempty"`
+type IbcbridgePacketData_NoData struct {
+	NoData *NoData `protobuf:"bytes,1,opt,name=noData,proto3,oneof" json:"noData,omitempty"`
+}
+type IbcbridgePacketData_MsgMintRequestPacket struct {
+	MsgMintRequestPacket *MsgMintRequestPacketData `protobuf:"bytes,2,opt,name=msgMintRequestPacket,proto3,oneof" json:"msgMintRequestPacket,omitempty"`
 }
 
-func (*IbcbridgePacketData_MintRequest) isIbcbridgePacketData_Packet() {}
+func (*IbcbridgePacketData_NoData) isIbcbridgePacketData_Packet()               {}
+func (*IbcbridgePacketData_MsgMintRequestPacket) isIbcbridgePacketData_Packet() {}
 
 func (m *IbcbridgePacketData) GetPacket() isIbcbridgePacketData_Packet {
 	if m != nil {
@@ -80,9 +85,16 @@ func (m *IbcbridgePacketData) GetPacket() isIbcbridgePacketData_Packet {
 	return nil
 }
 
-func (m *IbcbridgePacketData) GetMintRequest() *MsgMintRequest {
-	if x, ok := m.GetPacket().(*IbcbridgePacketData_MintRequest); ok {
-		return x.MintRequest
+func (m *IbcbridgePacketData) GetNoData() *NoData {
+	if x, ok := m.GetPacket().(*IbcbridgePacketData_NoData); ok {
+		return x.NoData
+	}
+	return nil
+}
+
+func (m *IbcbridgePacketData) GetMsgMintRequestPacket() *MsgMintRequestPacketData {
+	if x, ok := m.GetPacket().(*IbcbridgePacketData_MsgMintRequestPacket); ok {
+		return x.MsgMintRequestPacket
 	}
 	return nil
 }
@@ -90,32 +102,26 @@ func (m *IbcbridgePacketData) GetMintRequest() *MsgMintRequest {
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*IbcbridgePacketData) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*IbcbridgePacketData_MintRequest)(nil),
+		(*IbcbridgePacketData_NoData)(nil),
+		(*IbcbridgePacketData_MsgMintRequestPacket)(nil),
 	}
 }
 
-type MsgMintRequest struct {
-	Reciever    string `protobuf:"bytes,1,opt,name=reciever,proto3" json:"reciever,omitempty"`
-	Amount      uint64 `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
-	Fee         uint64 `protobuf:"varint,3,opt,name=fee,proto3" json:"fee,omitempty"`
-	TokenId     uint32 `protobuf:"varint,4,opt,name=tokenId,proto3" json:"tokenId,omitempty"`
-	SrcChainId  uint32 `protobuf:"varint,5,opt,name=src_chain_id,json=srcChainId,proto3" json:"src_chain_id,omitempty"`
-	DestChainId uint32 `protobuf:"varint,6,opt,name=dest_chain_id,json=destChainId,proto3" json:"dest_chain_id,omitempty"`
-	Signer      string `protobuf:"bytes,7,opt,name=signer,proto3" json:"signer,omitempty"`
+type NoData struct {
 }
 
-func (m *MsgMintRequest) Reset()         { *m = MsgMintRequest{} }
-func (m *MsgMintRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgMintRequest) ProtoMessage()    {}
-func (*MsgMintRequest) Descriptor() ([]byte, []int) {
+func (m *NoData) Reset()         { *m = NoData{} }
+func (m *NoData) String() string { return proto.CompactTextString(m) }
+func (*NoData) ProtoMessage()    {}
+func (*NoData) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e9181d8e9e54bcaf, []int{1}
 }
-func (m *MsgMintRequest) XXX_Unmarshal(b []byte) error {
+func (m *NoData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgMintRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *NoData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgMintRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_NoData.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -125,96 +131,182 @@ func (m *MsgMintRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *MsgMintRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgMintRequest.Merge(m, src)
+func (m *NoData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NoData.Merge(m, src)
 }
-func (m *MsgMintRequest) XXX_Size() int {
+func (m *NoData) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgMintRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgMintRequest.DiscardUnknown(m)
+func (m *NoData) XXX_DiscardUnknown() {
+	xxx_messageInfo_NoData.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgMintRequest proto.InternalMessageInfo
+var xxx_messageInfo_NoData proto.InternalMessageInfo
 
-func (m *MsgMintRequest) GetReciever() string {
+// this line is used by starport scaffolding # ibc/packet/proto/message
+// MsgMintRequestPacketData defines a struct for the packet payload
+type MsgMintRequestPacketData struct {
+	Reciever    string `protobuf:"bytes,1,opt,name=reciever,proto3" json:"reciever,omitempty"`
+	Amount      uint64 `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	Fee         uint64 `protobuf:"varint,3,opt,name=fee,proto3" json:"fee,omitempty"`
+	TokenId     uint32 `protobuf:"varint,4,opt,name=tokenId,proto3" json:"tokenId,omitempty"`
+	SrcChainId  uint32 `protobuf:"varint,5,opt,name=srcChainId,proto3" json:"srcChainId,omitempty"`
+	DestChainId uint32 `protobuf:"varint,6,opt,name=destChainId,proto3" json:"destChainId,omitempty"`
+}
+
+func (m *MsgMintRequestPacketData) Reset()         { *m = MsgMintRequestPacketData{} }
+func (m *MsgMintRequestPacketData) String() string { return proto.CompactTextString(m) }
+func (*MsgMintRequestPacketData) ProtoMessage()    {}
+func (*MsgMintRequestPacketData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e9181d8e9e54bcaf, []int{2}
+}
+func (m *MsgMintRequestPacketData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgMintRequestPacketData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgMintRequestPacketData.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgMintRequestPacketData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgMintRequestPacketData.Merge(m, src)
+}
+func (m *MsgMintRequestPacketData) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgMintRequestPacketData) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgMintRequestPacketData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgMintRequestPacketData proto.InternalMessageInfo
+
+func (m *MsgMintRequestPacketData) GetReciever() string {
 	if m != nil {
 		return m.Reciever
 	}
 	return ""
 }
 
-func (m *MsgMintRequest) GetAmount() uint64 {
+func (m *MsgMintRequestPacketData) GetAmount() uint64 {
 	if m != nil {
 		return m.Amount
 	}
 	return 0
 }
 
-func (m *MsgMintRequest) GetFee() uint64 {
+func (m *MsgMintRequestPacketData) GetFee() uint64 {
 	if m != nil {
 		return m.Fee
 	}
 	return 0
 }
 
-func (m *MsgMintRequest) GetTokenId() uint32 {
+func (m *MsgMintRequestPacketData) GetTokenId() uint32 {
 	if m != nil {
 		return m.TokenId
 	}
 	return 0
 }
 
-func (m *MsgMintRequest) GetSrcChainId() uint32 {
+func (m *MsgMintRequestPacketData) GetSrcChainId() uint32 {
 	if m != nil {
 		return m.SrcChainId
 	}
 	return 0
 }
 
-func (m *MsgMintRequest) GetDestChainId() uint32 {
+func (m *MsgMintRequestPacketData) GetDestChainId() uint32 {
 	if m != nil {
 		return m.DestChainId
 	}
 	return 0
 }
 
-func (m *MsgMintRequest) GetSigner() string {
+// MsgMintRequestPacketAck defines a struct for the packet acknowledgment
+type MsgMintRequestPacketAck struct {
+	TxId string `protobuf:"bytes,1,opt,name=txId,proto3" json:"txId,omitempty"`
+}
+
+func (m *MsgMintRequestPacketAck) Reset()         { *m = MsgMintRequestPacketAck{} }
+func (m *MsgMintRequestPacketAck) String() string { return proto.CompactTextString(m) }
+func (*MsgMintRequestPacketAck) ProtoMessage()    {}
+func (*MsgMintRequestPacketAck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e9181d8e9e54bcaf, []int{3}
+}
+func (m *MsgMintRequestPacketAck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgMintRequestPacketAck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgMintRequestPacketAck.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgMintRequestPacketAck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgMintRequestPacketAck.Merge(m, src)
+}
+func (m *MsgMintRequestPacketAck) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgMintRequestPacketAck) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgMintRequestPacketAck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgMintRequestPacketAck proto.InternalMessageInfo
+
+func (m *MsgMintRequestPacketAck) GetTxId() string {
 	if m != nil {
-		return m.Signer
+		return m.TxId
 	}
 	return ""
 }
 
 func init() {
 	proto.RegisterType((*IbcbridgePacketData)(nil), "rosenlabs.rosenchain.ibcbridge.IbcbridgePacketData")
-	proto.RegisterType((*MsgMintRequest)(nil), "rosenlabs.rosenchain.ibcbridge.MsgMintRequest")
+	proto.RegisterType((*NoData)(nil), "rosenlabs.rosenchain.ibcbridge.NoData")
+	proto.RegisterType((*MsgMintRequestPacketData)(nil), "rosenlabs.rosenchain.ibcbridge.MsgMintRequestPacketData")
+	proto.RegisterType((*MsgMintRequestPacketAck)(nil), "rosenlabs.rosenchain.ibcbridge.MsgMintRequestPacketAck")
 }
 
 func init() { proto.RegisterFile("ibcbridge/packet.proto", fileDescriptor_e9181d8e9e54bcaf) }
 
 var fileDescriptor_e9181d8e9e54bcaf = []byte{
-	// 318 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0xc1, 0x4e, 0xc2, 0x40,
-	0x10, 0x86, 0xbb, 0x82, 0x05, 0x07, 0x31, 0x66, 0x4d, 0xc8, 0xc6, 0xc3, 0xa6, 0xe1, 0xc4, 0xc5,
-	0x6d, 0x82, 0x6f, 0x80, 0x1e, 0x24, 0x91, 0xc4, 0xf4, 0xe8, 0x85, 0xb4, 0xdb, 0xb1, 0x6c, 0x90,
-	0x16, 0x77, 0x17, 0xa3, 0x6f, 0xe1, 0x63, 0x79, 0x32, 0x1c, 0x3d, 0x1a, 0x78, 0x11, 0xd3, 0x95,
-	0x52, 0xbd, 0x78, 0x9b, 0x7f, 0xf6, 0x9b, 0xd9, 0x3f, 0xff, 0x40, 0x4f, 0x25, 0x32, 0xd1, 0x2a,
-	0xcd, 0x30, 0x5c, 0xc6, 0x72, 0x8e, 0x56, 0x2c, 0x75, 0x61, 0x0b, 0xca, 0x75, 0x61, 0x30, 0x7f,
-	0x8c, 0x13, 0x23, 0x5c, 0x25, 0x67, 0xb1, 0xca, 0xc5, 0x1e, 0xee, 0x1b, 0x38, 0x1b, 0x57, 0xe2,
-	0xce, 0x0d, 0x5e, 0xc7, 0x36, 0xa6, 0x11, 0x74, 0x16, 0x2a, 0xb7, 0x11, 0x3e, 0xad, 0xd0, 0x58,
-	0x46, 0x02, 0x32, 0xe8, 0x0c, 0x85, 0xf8, 0x7f, 0x99, 0x98, 0x98, 0x6c, 0x52, 0x4f, 0xdd, 0x78,
-	0xd1, 0xef, 0x25, 0xa3, 0x36, 0xf8, 0x3f, 0xd6, 0xfa, 0x1f, 0x04, 0x4e, 0xfe, 0xb2, 0xf4, 0x1c,
-	0xda, 0x1a, 0xa5, 0xc2, 0x67, 0xd4, 0xee, 0xb7, 0xa3, 0x68, 0xaf, 0x69, 0x0f, 0xfc, 0x78, 0x51,
-	0xac, 0x72, 0xcb, 0x0e, 0x02, 0x32, 0x68, 0x46, 0x3b, 0x45, 0x4f, 0xa1, 0xf1, 0x80, 0xc8, 0x1a,
-	0xae, 0x59, 0x96, 0x94, 0x41, 0xcb, 0x16, 0x73, 0xcc, 0xc7, 0x29, 0x6b, 0x06, 0x64, 0xd0, 0x8d,
-	0x2a, 0x49, 0x03, 0x38, 0x36, 0x5a, 0x4e, 0x9d, 0xe3, 0xa9, 0x4a, 0xd9, 0xa1, 0x7b, 0x06, 0xa3,
-	0xe5, 0x55, 0xd9, 0x1a, 0xa7, 0xb4, 0x0f, 0xdd, 0x14, 0x8d, 0xad, 0x11, 0xdf, 0x21, 0x9d, 0xb2,
-	0x59, 0x31, 0x3d, 0xf0, 0x8d, 0xca, 0x72, 0xd4, 0xac, 0xe5, 0x3c, 0xee, 0xd4, 0xe8, 0xf6, 0x7d,
-	0xc3, 0xc9, 0x7a, 0xc3, 0xc9, 0xd7, 0x86, 0x93, 0xb7, 0x2d, 0xf7, 0xd6, 0x5b, 0xee, 0x7d, 0x6e,
-	0xb9, 0x77, 0x3f, 0xcc, 0x94, 0x9d, 0xad, 0x12, 0x21, 0x8b, 0x45, 0xe8, 0x32, 0xbb, 0x28, 0xe3,
-	0x0b, 0xeb, 0xf8, 0xc2, 0x97, 0xb0, 0x3e, 0x9d, 0x7d, 0x5d, 0xa2, 0x49, 0x7c, 0x77, 0xba, 0xcb,
-	0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x89, 0x53, 0x83, 0x05, 0xd4, 0x01, 0x00, 0x00,
+	// 346 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x52, 0xbd, 0x4e, 0xf3, 0x40,
+	0x10, 0xf4, 0x7d, 0xc9, 0x67, 0xc2, 0x46, 0x48, 0xe8, 0x40, 0xc1, 0xa2, 0x38, 0x45, 0x2e, 0x50,
+	0x9a, 0xd8, 0x52, 0x68, 0x28, 0x21, 0x50, 0x60, 0x89, 0x20, 0xe4, 0x92, 0xce, 0x3e, 0x2f, 0x89,
+	0x15, 0x72, 0x17, 0x7c, 0x17, 0x14, 0xde, 0x82, 0x07, 0xe2, 0x01, 0x28, 0x43, 0x47, 0x89, 0x92,
+	0x17, 0x41, 0x3e, 0x3b, 0x3f, 0x45, 0x80, 0x6e, 0x66, 0x6f, 0x76, 0x6e, 0x76, 0xb5, 0xd0, 0x48,
+	0x63, 0x1e, 0x67, 0x69, 0xd2, 0x47, 0x7f, 0x1c, 0xf1, 0x21, 0x6a, 0x6f, 0x9c, 0x49, 0x2d, 0x29,
+	0xcb, 0xa4, 0x42, 0xf1, 0x18, 0xc5, 0xca, 0x33, 0x88, 0x0f, 0xa2, 0x54, 0x78, 0x2b, 0xb1, 0xfb,
+	0x41, 0xe0, 0x20, 0x58, 0xb2, 0x3b, 0xd3, 0x79, 0x15, 0xe9, 0x88, 0x9e, 0x83, 0x2d, 0x64, 0x8e,
+	0x1c, 0xd2, 0x24, 0xad, 0x7a, 0xe7, 0xc4, 0xfb, 0xdd, 0xc8, 0xbb, 0x35, 0xea, 0x6b, 0x2b, 0x2c,
+	0xfb, 0xa8, 0x80, 0xc3, 0x91, 0xea, 0xf7, 0x52, 0xa1, 0x43, 0x7c, 0x9a, 0xa0, 0xd2, 0x85, 0xbb,
+	0xf3, 0xcf, 0xf8, 0x9d, 0xfd, 0xe5, 0xd7, 0xdb, 0xd2, 0x5b, 0xfe, 0xb0, 0xd5, 0xb7, 0x5b, 0x03,
+	0xbb, 0x98, 0xdc, 0xad, 0x81, 0x5d, 0xa4, 0x71, 0xdf, 0x08, 0x38, 0x3f, 0x19, 0xd1, 0x63, 0xa8,
+	0x65, 0xc8, 0x53, 0x7c, 0xc6, 0xcc, 0x0c, 0xb9, 0x1b, 0xae, 0x38, 0x6d, 0x80, 0x1d, 0x8d, 0xe4,
+	0x44, 0x14, 0x71, 0xab, 0x61, 0xc9, 0xe8, 0x3e, 0x54, 0x1e, 0x10, 0x9d, 0x8a, 0x29, 0xe6, 0x90,
+	0x3a, 0xb0, 0xa3, 0xe5, 0x10, 0x45, 0x90, 0x38, 0xd5, 0x26, 0x69, 0xed, 0x85, 0x4b, 0x4a, 0x19,
+	0x80, 0xca, 0xf8, 0x65, 0x3e, 0x57, 0x90, 0x38, 0xff, 0xcd, 0xe3, 0x46, 0x85, 0x36, 0xa1, 0x9e,
+	0xa0, 0xd2, 0x4b, 0x81, 0x6d, 0x04, 0x9b, 0x25, 0xb7, 0x0d, 0x47, 0xdb, 0xd2, 0x5f, 0xf0, 0x21,
+	0xa5, 0x50, 0xd5, 0xd3, 0x20, 0x29, 0x83, 0x1b, 0xdc, 0xbd, 0x79, 0x9f, 0x33, 0x32, 0x9b, 0x33,
+	0xf2, 0x35, 0x67, 0xe4, 0x75, 0xc1, 0xac, 0xd9, 0x82, 0x59, 0x9f, 0x0b, 0x66, 0xdd, 0x77, 0xfa,
+	0xa9, 0x1e, 0x4c, 0x62, 0x8f, 0xcb, 0x91, 0x6f, 0xb6, 0xdd, 0xce, 0x17, 0xef, 0xaf, 0x17, 0xef,
+	0x4f, 0xfd, 0xf5, 0x01, 0xe9, 0x97, 0x31, 0xaa, 0xd8, 0x36, 0x07, 0x74, 0xfa, 0x1d, 0x00, 0x00,
+	0xff, 0xff, 0xb1, 0x03, 0xa4, 0xca, 0x5a, 0x02, 0x00, 0x00,
 }
 
 func (m *IbcbridgePacketData) Marshal() (dAtA []byte, err error) {
@@ -249,16 +341,16 @@ func (m *IbcbridgePacketData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *IbcbridgePacketData_MintRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *IbcbridgePacketData_NoData) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *IbcbridgePacketData_MintRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *IbcbridgePacketData_NoData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.MintRequest != nil {
+	if m.NoData != nil {
 		{
-			size, err := m.MintRequest.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.NoData.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -270,7 +362,28 @@ func (m *IbcbridgePacketData_MintRequest) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
-func (m *MsgMintRequest) Marshal() (dAtA []byte, err error) {
+func (m *IbcbridgePacketData_MsgMintRequestPacket) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IbcbridgePacketData_MsgMintRequestPacket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MsgMintRequestPacket != nil {
+		{
+			size, err := m.MsgMintRequestPacket.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPacket(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *NoData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -280,23 +393,39 @@ func (m *MsgMintRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgMintRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *NoData) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgMintRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *NoData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintPacket(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgMintRequestPacketData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
 	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgMintRequestPacketData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgMintRequestPacketData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	if m.DestChainId != 0 {
 		i = encodeVarintPacket(dAtA, i, uint64(m.DestChainId))
 		i--
@@ -332,6 +461,36 @@ func (m *MsgMintRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgMintRequestPacketAck) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgMintRequestPacketAck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgMintRequestPacketAck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.TxId) > 0 {
+		i -= len(m.TxId)
+		copy(dAtA[i:], m.TxId)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.TxId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPacket(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPacket(v)
 	base := offset
@@ -355,19 +514,40 @@ func (m *IbcbridgePacketData) Size() (n int) {
 	return n
 }
 
-func (m *IbcbridgePacketData_MintRequest) Size() (n int) {
+func (m *IbcbridgePacketData_NoData) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.MintRequest != nil {
-		l = m.MintRequest.Size()
+	if m.NoData != nil {
+		l = m.NoData.Size()
 		n += 1 + l + sovPacket(uint64(l))
 	}
 	return n
 }
-func (m *MsgMintRequest) Size() (n int) {
+func (m *IbcbridgePacketData_MsgMintRequestPacket) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MsgMintRequestPacket != nil {
+		l = m.MsgMintRequestPacket.Size()
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	return n
+}
+func (m *NoData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgMintRequestPacketData) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -392,7 +572,16 @@ func (m *MsgMintRequest) Size() (n int) {
 	if m.DestChainId != 0 {
 		n += 1 + sovPacket(uint64(m.DestChainId))
 	}
-	l = len(m.Signer)
+	return n
+}
+
+func (m *MsgMintRequestPacketAck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TxId)
 	if l > 0 {
 		n += 1 + l + sovPacket(uint64(l))
 	}
@@ -436,7 +625,7 @@ func (m *IbcbridgePacketData) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MintRequest", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NoData", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -463,11 +652,46 @@ func (m *IbcbridgePacketData) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &MsgMintRequest{}
+			v := &NoData{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Packet = &IbcbridgePacketData_MintRequest{v}
+			m.Packet = &IbcbridgePacketData_NoData{v}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MsgMintRequestPacket", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MsgMintRequestPacketData{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Packet = &IbcbridgePacketData_MsgMintRequestPacket{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -490,7 +714,7 @@ func (m *IbcbridgePacketData) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgMintRequest) Unmarshal(dAtA []byte) error {
+func (m *NoData) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -513,10 +737,60 @@ func (m *MsgMintRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgMintRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: NoData: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgMintRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: NoData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPacket(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgMintRequestPacketData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPacket
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgMintRequestPacketData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgMintRequestPacketData: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -646,9 +920,59 @@ func (m *MsgMintRequest) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPacket(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgMintRequestPacketAck) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPacket
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgMintRequestPacketAck: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgMintRequestPacketAck: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TxId", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -676,7 +1000,7 @@ func (m *MsgMintRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
+			m.TxId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
