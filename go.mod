@@ -1,4 +1,4 @@
-module github.com/example/blog
+module github.com/rosen-labs/rosenchain
 
 go 1.16
 
