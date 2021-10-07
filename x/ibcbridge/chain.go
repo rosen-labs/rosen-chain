@@ -50,8 +50,9 @@ func (e ContractEndpoint) Mint(
 }
 
 type CosmosDenomEndpoint struct {
-	TokenName string
-	Denom     string
+	CosmosChainId string
+	TokenName     string
+	Denom         string
 }
 
 func (e CosmosDenomEndpoint) Mint(
@@ -76,7 +77,8 @@ func init() {
 
 	chainMap[1] = Chain{ChainName: "XChain", ChainId: 1, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
 	chainMap[1].TokenEndpointMap[0] = CosmosDenomEndpoint{
-		TokenName: "x",
-		Denom:     "token",
+		CosmosChainId: "x:0",
+		TokenName:     "x",
+		Denom:         "token",
 	}
 }

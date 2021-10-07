@@ -18,6 +18,7 @@ message MsgMintRequest {
     uint32 tokenId = 4;
     uint32 src_chain_id = 5;
     uint32 dest_chain_id = 6;
+    string signer = 7;
 }
 
 // this line is used by starport scaffolding # ibc/packet/proto/message

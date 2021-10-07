@@ -4,6 +4,26 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+func NewMsgMintRequest(
+	reciever string,
+	amount uint64,
+	fee uint64,
+	tokenId uint32,
+	src_chain_id uint32,
+	dest_chain_id uint32,
+	signer sdk.Address,
+) *MsgMintRequest {
+	return &MsgMintRequest{
+		Reciever:    reciever,
+		Amount:      amount,
+		Fee:         fee,
+		TokenId:     tokenId,
+		SrcChainId:  src_chain_id,
+		DestChainId: dest_chain_id,
+		Signer:      signer.String(),
+	}
+}
+
 // Route ...
 func (m *MsgMintRequest) Route() string {
 	return "ibcbridge"
@@ -24,5 +44,9 @@ func (m *MsgMintRequest) GetSignBytes() []byte {
 }
 
 func (m *MsgMintRequest) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{}
+	creator, err := sdk.AccAddressFromBech32(m.Signer)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
 }

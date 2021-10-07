@@ -2,11 +2,15 @@ package cli
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/rosen-labs/rosenchain/x/ibcbridge/types"
 )
@@ -30,57 +34,96 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	// this line is used by starport scaffolding # 1
+	cmd.AddCommand(GetBridgeXTokenCmd())
+	return cmd
+}
+
+func GetBridgeXTokenCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "bridge-to [src_chain_id] [des_chain_id] [token_id] [amount] [fee] [reciever]",
+		Short: "Bridge amounts of x token to specific chain",
+		Args:  cobra.ExactArgs(6),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			argsReciever := string(args[4])
+			var argsTokenId, argsSrcChainId, argsDestChainId uint32
+			var argsAmount, argsFee uint64
+
+			if value, err := argsToUint32("src_chain_id", args[0]); err != nil {
+				return err
+			} else {
+				argsSrcChainId = value
+			}
+
+			if value, err := argsToUint32("dest_chain_id", args[1]); err != nil {
+				return err
+			} else {
+				argsDestChainId = value
+			}
+
+			if value, err := argsToUint32("token_id", args[2]); err != nil {
+				return err
+			} else {
+				argsTokenId = value
+			}
+
+			if value, err := argsToUint64("amount", args[3]); err != nil {
+				return err
+			} else {
+				argsAmount = value
+			}
+
+			if value, err := argsToUint64("fee", args[4]); err != nil {
+				return err
+			} else {
+				argsFee = value
+			}
+
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			from := clientCtx.GetFromAddress()
+			if from == nil {
+				return fmt.Errorf("must pass from flag")
+			}
+
+			msg := types.NewMsgMintRequest(
+				argsReciever,
+				argsAmount,
+				argsFee,
+				argsTokenId,
+				argsSrcChainId,
+				argsDestChainId,
+				from,
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-// func GetBridgeXTokenCmd() *cobra.Command {
-// 	cmd := &cobra.Command{
-// 		Use:   "bridge-to [chain_id] [amount] [fee] [reciever]",
-// 		Short: "Bridge amounts of x token to specific chain",
-// 		Args:  cobra.ExactArgs(4),
-// 		RunE: func(cmd *cobra.Command, args []string) error {
-// 			argsChainId := string(args[0])
-// 			argsAmount := string(args[1])
-// 			argsFee := string(args[2])
-// 			argsReciever := string(args[3])
+func argsToUint32(argsName string, value string) (uint32, error) {
+	temp, err := strconv.ParseUint(value, 10, 32)
+	if err != nil {
+		return 0, fmt.Errorf("%s must be number (uint32)", argsName)
+	} else {
+		return uint32(temp), nil
+	}
+}
 
-// 			clientCtx, err := client.GetClientTxContext(cmd)
-// 			if err != nil {
-// 				return err
-// 			}
-
-// 			from := clientCtx.GetFromAddress()
-// 			if from == nil {
-// 				return fmt.Errorf("must pass from flag")
-// 			}
-
-// 			amount, err := sdk.ParseCoinNormalized(argsAmount)
-// 			if err != nil {
-// 				return fmt.Errorf("amount must be float")
-// 			}
-
-// 			fee, err := sdk.ParseCoinNormalized(argsFee)
-// 			if err != nil {
-// 				return fmt.Errorf("fee must be float")
-// 			}
-
-// 			msg := types.NewMsgBridgeRequest(
-// 				argsChainId,
-// 				amount,
-// 				fee,
-// 				argsReciever,
-// 				from,
-// 			)
-
-// 			if err := msg.ValidateBasic(); err != nil {
-// 				return err
-// 			}
-// 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-// 		},
-// 	}
-
-// 	flags.AddTxFlagsToCmd(cmd)
-
-// 	return cmd
-// }
+func argsToUint64(argsName string, value string) (uint64, error) {
+	temp, err := strconv.ParseUint(value, 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("%s must be number (uint32)", argsName)
+	} else {
+		return temp, nil
+	}
+}
