@@ -2,7 +2,7 @@ package types
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "ibcbridge"
+	ModuleName = "xchain"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName

@@ -61,7 +61,7 @@ func (e CosmosDenomEndpoint) Mint(
 	amount uint64,
 	fee uint64,
 ) error {
-	fmt.Println("TODO implement Cosmos denom mint")
+	fmt.Println("TODO implement Cosmos denom mint @Gang")
 	return nil
 }
 
