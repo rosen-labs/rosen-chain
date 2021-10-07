@@ -17,15 +17,15 @@ const (
 	MemStoreKey = "mem_ibcbridge"
 
 	// Version defines the current version the IBC module supports
-	Version = "ibcbridge-1"
+	Version = "rosenchain-1"
 
 	// PortID is the default port id that module binds to
-	PortID = "ibcbridge"
+	PortID = "rosenchain"
 )
 
 var (
 	// PortKey defines the key to store the port ID in store
-	PortKey = KeyPrefix("ibcbridge-port-")
+	PortKey = KeyPrefix("rosenchain-port-")
 )
 
 func KeyPrefix(p string) []byte {

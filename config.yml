@@ -3,6 +3,10 @@ accounts:
     coins: ['20000token', '200000000stake']
   - name: bob
     coins: ['10000token', '100000000stake']
+  - name: relayer
+    address: cosmos1qqae7949a97krudpg2nq299rlp449z0qc2989e
+    coins: ['20000token', '200000000stake']
+
 validator:
   name: alice
   staked: '100000000stake'
@@ -16,3 +20,11 @@ genesis:
 faucet:
   name: bob
   coins: ['5token', '100000stake']
+host:
+  rpc: ':26659'
+  p2p: ':26658'
+  prof: ':6061'
+  grpc: ':9091'
+  api: ':1318'
+  frontend: ':8081'
+  dev-ui: ':12346'
