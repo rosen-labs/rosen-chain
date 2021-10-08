@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	clienttypes "github.com/cosmos/cosmos-sdk/x/ibc/core/02-client/types"
@@ -9,6 +10,7 @@ import (
 )
 
 func (k msgServer) SendMsgMintRequest(goCtx context.Context, msg *types.MsgSendMsgMintRequest) (*types.MsgSendMsgMintRequestResponse, error) {
+	fmt.Println("DEBUG : start sending mint request")
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// TODO: logic before transmitting the packet
@@ -35,6 +37,8 @@ func (k msgServer) SendMsgMintRequest(goCtx context.Context, msg *types.MsgSendM
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println("DEBUG : transmitted message")
 
 	return &types.MsgSendMsgMintRequestResponse{}, nil
 }

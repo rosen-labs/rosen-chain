@@ -4,7 +4,6 @@ package types
 func (p MsgMintRequestPacketData) ValidateBasic() error {
 
 	// TODO: Validate the packet data
-
 	return nil
 }
 

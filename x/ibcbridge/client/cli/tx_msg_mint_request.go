@@ -21,23 +21,27 @@ func CmdSendMsgMintRequest() *cobra.Command {
 		Args:  cobra.ExactArgs(8),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsReciever := string(args[2])
-			argsAmount, err := argsToUint64("amount", args[0])
+			argsAmount, err := argsToUint64("amount", args[3])
 			if err != nil {
 				return err
 			}
-			argsFee, err := argsToUint64("fee", args[0])
+			argsFee, err := argsToUint64("fee", args[4])
 			if err != nil {
 				return err
 			}
-			argsTokenId, err := argsToUint32("token_id", args[0])
+			argsTokenId, err := argsToUint32("token_id", args[5])
 			if err != nil {
 				return err
 			}
-			argsSrcChainId, err := argsToUint32("src_chain_id", args[0])
+			argsSrcChainId, err := argsToUint32("src_chain_id", args[6])
 			if err != nil {
 				return err
 			}
-			var argsDestChainId uint32 = 1
+
+			argsDestChainId, err := argsToUint32("dest_chain_id", args[7])
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {

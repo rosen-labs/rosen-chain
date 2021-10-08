@@ -73,7 +73,15 @@ func (k Keeper) OnRecvMsgMintRequestPacket(ctx sdk.Context, packet channeltypes.
 		return packetAck, err
 	}
 
-	msg := types.NewMsgMintRequest(data.Reciever, data.Amount, data.Fee, data.TokenId, data.SrcChainId, data.DestChainId, nil)
+	msg := &types.MsgMintRequest{
+		Reciever:    data.Reciever,
+		Amount:      data.Amount,
+		Fee:         data.Fee,
+		TokenId:     data.TokenId,
+		SrcChainId:  data.SrcChainId,
+		DestChainId: data.DestChainId,
+		Signer:      "",
+	}
 
 	if err := k.Bridge(ctx, msg); err != nil {
 		return packetAck, err

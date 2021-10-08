@@ -46,6 +46,12 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 }
 
 func (k Keeper) Bridge(ctx sdk.Context, msg *types.MsgMintRequest) error {
+	fmt.Printf("DEBUG start bridging | %#v", msg)
+	fmt.Printf(
+		"DEBUG mint from %s to %s",
+		chainMap.GetChainById(msg.SrcChainId).ChainName,
+		chainMap.GetChainById(msg.DestChainId).ChainName,
+	)
 	tokenEndpoint := chainMap.GetChainById(msg.DestChainId).GetTokenEndpointById(msg.TokenId)
-	return tokenEndpoint.Mint(ctx, k, msg.Reciever, msg.Amount, msg.Fee)
+	return tokenEndpoint.Mint(ctx, k, msg.Reciever, msg.Amount, msg.Fee, msg.SrcChainId)
 }

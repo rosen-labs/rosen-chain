@@ -13,7 +13,7 @@ func NewMsgMintRequest(
 	dest_chain_id uint32,
 	signer sdk.Address,
 ) *MsgMintRequest {
-	return &MsgMintRequest{
+	result := &MsgMintRequest{
 		Reciever:    reciever,
 		Amount:      amount,
 		Fee:         fee,
@@ -22,6 +22,8 @@ func NewMsgMintRequest(
 		DestChainId: dest_chain_id,
 		Signer:      signer.String(),
 	}
+
+	return result
 }
 
 // Route ...
