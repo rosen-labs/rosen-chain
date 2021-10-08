@@ -7,8 +7,7 @@ import (
 )
 
 func handleMsgBridgeRequest(ctx sdk.Context, k keeper.Keeper, msg *types.MsgMintRequest) (*sdk.Result, error) {
-	tokenEndpoint := chainMap.GetChainById(msg.DestChainId).GetTokenEndpointById(msg.TokenId)
-	if err := tokenEndpoint.Mint(ctx, k, msg.Reciever, msg.Amount, msg.Fee); err != nil {
+	if err := k.Bridge(ctx, msg); err != nil {
 		return nil, err
 	}
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil

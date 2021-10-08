@@ -6,18 +6,27 @@ option go_package = "github.com/rosen-labs/rosenchain/x/ibcbridge/types";
 message IbcbridgePacketData {
     
     oneof packet {
-        MsgMintRequest mintRequest = 1;
+        NoData noData = 1;
         // this line is used by starport scaffolding # ibc/packet/proto/field
+		MsgMintRequestPacketData msgMintRequestPacket = 2; // this line is used by starport scaffolding # ibc/packet/proto/field/number
     }
 }
 
-message MsgMintRequest {
-    string reciever = 1;
-    uint64 amount = 2;
-    uint64 fee = 3;
-    uint32 tokenId = 4;
-    uint32 src_chain_id = 5;
-    uint32 dest_chain_id = 6;
+message NoData {
 }
 
 // this line is used by starport scaffolding # ibc/packet/proto/message
+// MsgMintRequestPacketData defines a struct for the packet payload
+message MsgMintRequestPacketData {
+  string reciever = 1;
+  uint64 amount = 2;
+  uint64 fee = 3;
+  uint32 tokenId = 4;
+  uint32 srcChainId = 5;
+  uint32 destChainId = 6;
+}
+
+// MsgMintRequestPacketAck defines a struct for the packet acknowledgment
+message MsgMintRequestPacketAck {
+	  string txId = 1;
+}

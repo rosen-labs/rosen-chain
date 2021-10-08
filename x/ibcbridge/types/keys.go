@@ -2,7 +2,7 @@ package types
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "ibcbridge"
+	ModuleName = "rosenchain"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
@@ -17,15 +17,15 @@ const (
 	MemStoreKey = "mem_ibcbridge"
 
 	// Version defines the current version the IBC module supports
-	Version = "ibcbridge-1"
+	Version = "bridge-1"
 
 	// PortID is the default port id that module binds to
-	PortID = "ibcbridge"
+	PortID = "bridge"
 )
 
 var (
 	// PortKey defines the key to store the port ID in store
-	PortKey = KeyPrefix("ibcbridge-port-")
+	PortKey = KeyPrefix("rosenchain-port-")
 )
 
 func KeyPrefix(p string) []byte {
