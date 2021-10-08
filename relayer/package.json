@@ -1,0 +1,20 @@
+{
+  "name": "relayer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cosmjs/proto-signing": "^0.26.1",
+    "@cosmjs/stargate": "^0.26.1",
+    "abi-decoder": "^2.4.0",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.4.7",
+    "web3": "^1.6.0"
+  }
+}
