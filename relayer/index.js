@@ -2,11 +2,7 @@ require("dotenv").config()
 const Web3 = require("web3")
 const RosenABI = require("./constant/abi/Rosen.json")
 const { DirectSecp256k1HdWallet } = require("@cosmjs/proto-signing")
-const {
-  assertIsBroadcastTxSuccess,
-  SigningStargateClient,
-  StargateClient,
-} = require("@cosmjs/stargate")
+const { SigningCosmosClient } = require("@cosmjs/launchpad")
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.ETH_WSS))
 const rosenEthContract = new web3.eth.Contract(RosenABI, process.env.ROSEN_ETH)
@@ -33,17 +29,19 @@ web3.eth
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic)
       const [firstAccount] = await wallet.getAccounts()
 
-      const rpcEndpoint = "http://localhost:26659"
-      const client = await SigningStargateClient.connectWithSigner(
+      const rpcEndpoint = "http://localhost:1318"
+      //   const client = await SigningStargateClient.connectWithSigner(
+      //     rpcEndpoint,
+      //     wallet
+      //   )
+      const client = new SigningCosmosClient(
         rpcEndpoint,
+        firstAccount.address,
         wallet
       )
 
-      console.log(firstAccount)
-      console.log(firstAccount.address)
-
       const msg = {
-        type: "ibcbridge/SendMsgMintRequest",
+        typeUrl: "ibcbridge/SendMsgMintRequest",
         value: {
           sender: firstAccount.address,
           port: "bridge",
@@ -58,8 +56,7 @@ web3.eth
         },
       }
 
-      await client.signAndBroadcast(firstAccount.address, [msg])
-
+      await client.signAndBroadcast([msg])
       //   assertIsBroadcastTxSuccess(result)
     } catch (e) {
       console.error(e)
