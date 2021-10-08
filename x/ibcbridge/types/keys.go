@@ -2,7 +2,7 @@ package types
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "xchain"
+	ModuleName = "rosenchain"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
@@ -17,10 +17,10 @@ const (
 	MemStoreKey = "mem_ibcbridge"
 
 	// Version defines the current version the IBC module supports
-	Version = "rosenchain-1"
+	Version = "bridge-1"
 
 	// PortID is the default port id that module binds to
-	PortID = "rosenchain"
+	PortID = "bridge"
 )
 
 var (
