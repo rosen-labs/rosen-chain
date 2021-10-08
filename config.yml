@@ -6,6 +6,9 @@ accounts:
   - name: relayer
     address: cosmos1qqae7949a97krudpg2nq299rlp449z0qc2989e
     coins: ['20000token', '200000000stake']
+  - name: adapter
+    address: cosmos1lsagfzrm4gz28he4wunt63sts5xzmczw8pkek3
+    coins: ['20000token', '200000000stake']
 
 validator:
   name: alice

@@ -33,24 +33,34 @@ web3.eth
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic)
       const [firstAccount] = await wallet.getAccounts()
 
-      const rpcEndpoint = "https://rpc.my_tendermint_rpc_node"
+      const rpcEndpoint = "http://localhost:26659"
       const client = await SigningStargateClient.connectWithSigner(
         rpcEndpoint,
         wallet
       )
 
-      const recipient = "cosmos1xv9tklw7d82sezh9haa573wufgy59vmwe6xxe5"
-      const amount = {
-        denom: "ucosm",
-        amount: "1234567",
+      console.log(firstAccount)
+      console.log(firstAccount.address)
+
+      const msg = {
+        type: "ibcbridge/SendMsgMintRequest",
+        value: {
+          sender: firstAccount.address,
+          port: "bridge",
+          channelID: "channel-1",
+          timeoutTimestamp: "timeoutTimestamp",
+          reciever: "cosmos184n5ltlkjt3dmwk29cwhxgqkwhlgr7lssyxv3z",
+          amount: 123,
+          fee: 1,
+          tokenId: 0,
+          srcChainId: 0,
+          destChainId: 1,
+        },
       }
-      const result = await client.sendTokens(
-        firstAccount.address,
-        recipient,
-        [amount],
-        "Have fun with your star coins"
-      )
-      assertIsBroadcastTxSuccess(result)
+
+      await client.signAndBroadcast(firstAccount.address, [msg])
+
+      //   assertIsBroadcastTxSuccess(result)
     } catch (e) {
       console.error(e)
     }
