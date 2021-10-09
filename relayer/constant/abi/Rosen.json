@@ -34,7 +34,7 @@
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "string",
         "name": "_receiver",
         "type": "string"
