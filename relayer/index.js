@@ -18,7 +18,7 @@ const polyProviderRpc = new ethers.providers.JsonRpcProvider(
 const harmonyProviderRpc = new ethers.providers.JsonRpcProvider(
   process.env.HARMONY_RPC
 )
-// const rosenWs = new WebSocket(process.env.ROSEN_WSS)
+const rosenWs = new WebSocket(process.env.ROSEN_WSS)
 
 const polyWallet = new ethers.Wallet(
   process.env.PRIVATE_KEY_POLY,
@@ -200,52 +200,52 @@ harmonyProvider.on(
 )
 
 // Rosen web socket section
-// console.log("Start listen event on cosmos")
-// rosenWs.onopen = function () {
-//   rosenWs.send(
-//     JSON.stringify({
-//       jsonrpc: "2.0",
-//       method: "subscribe",
-//       id: 0,
-//       params: {
-//         query: "tm.event='Tx' AND bridging_mint.event_name='bridging_mint'",
-//       },
-//     })
-//   )
-// }
+console.log("Start listen event on cosmos")
+rosenWs.onopen = function () {
+  rosenWs.send(
+    JSON.stringify({
+      jsonrpc: "2.0",
+      method: "subscribe",
+      id: 0,
+      params: {
+        query: "tm.event='Tx' AND bridging_mint.event_name='bridging_mint'",
+      },
+    })
+  )
+}
 
-// function convert(msg) {
-//   const prefix = "bridging_mint."
-//   let result = {}
-//   for (const [key, value] of Object.entries(
-//     JSON.parse(msg.data).result.events
-//   )) {
-//     if (key.startsWith(prefix)) {
-//       const newKey = key.replace(prefix, "")
-//       result[newKey] = value[0]
-//     }
-//   }
-//   return result
-// }
+function convert(msg) {
+  const prefix = "bridging_mint."
+  let result = {}
+  for (const [key, value] of Object.entries(
+    JSON.parse(msg.data).result.events
+  )) {
+    if (key.startsWith(prefix)) {
+      const newKey = key.replace(prefix, "")
+      result[newKey] = value[0]
+    }
+  }
+  return result
+}
 
-// rosenWs.onmessage = async function (msg) {
-//   try {
-//     const { reciever, amount, fee, dest_chain_id, contract } = convert(msg)
-//     switch (Number(dest_chain_id)) {
-//       // Polygon
-//       case Number(process.env.POLY_CHAIN_ID):
-//         await sendToPolygon(contract, reciever, amount, 0)
-//         break
+rosenWs.onmessage = async function (msg) {
+  try {
+    const { reciever, amount, fee, dest_chain_id, contract } = convert(msg)
+    switch (Number(dest_chain_id)) {
+      // Polygon
+      case Number(process.env.POLY_CHAIN_ID):
+        await sendToPolygon(contract, reciever, amount, 0)
+        break
 
-//       // Harmony
-//       case Number(process.env.HARMONY_CHAIN_ID):
-//         await sendToHarmony(contract, reciever, amount, 0)
-//         break
+      // Harmony
+      case Number(process.env.HARMONY_CHAIN_ID):
+        await sendToHarmony(contract, reciever, amount, 0)
+        break
 
-//       default:
-//         break
-//     }
-//   } catch (e) {
-//     console.error(e)
-//   }
-// }
+      default:
+        break
+    }
+  } catch (e) {
+    console.error(e)
+  }
+}
