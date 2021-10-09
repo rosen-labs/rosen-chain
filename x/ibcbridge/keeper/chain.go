@@ -56,7 +56,8 @@ func (e ContractEndpoint) Mint(
 	ctx.EventManager().EmitEvents([]sdk.Event{
 		sdk.NewEvent(
 			types.EventTypeBridgingMint,
-
+			sdk.NewAttribute(types.AttributeKeyEventName, types.EventTypeBridgingMint),
+			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
 			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
 			sdk.NewAttribute(types.AttributeKeyAmount, fmt.Sprintf("%d", amount)),
 			sdk.NewAttribute(types.AttributeKeyFee, fmt.Sprintf("%d", fee)),
@@ -109,7 +110,7 @@ func (e CosmosDenomEndpoint) Mint(
 	ctx.EventManager().EmitEvents([]sdk.Event{
 		sdk.NewEvent(
 			types.EventTypeBridgingMint,
-
+			sdk.NewAttribute(types.AttributeKeyEventName, types.EventTypeBridgingMint),
 			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
 			sdk.NewAttribute(types.AttributeKeyAmount, fmt.Sprintf("%d", amount)),
 			sdk.NewAttribute(types.AttributeKeyFee, fmt.Sprintf("%d", fee)),
