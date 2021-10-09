@@ -14,7 +14,7 @@ contract Rosen is ReentrancyGuard, Ownable {
   event SendToChain(
     address _tokenContract,
     address indexed _sender,
-    string indexed _receiver,
+    string _receiver,
     uint256 _sourceChain,
     uint256 indexed _desChain,
     uint256 _amount
