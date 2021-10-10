@@ -55,6 +55,9 @@ const sendToPolygon = async (
   try {
     const parseAmount =
       from === "cosmos" ? ethers.utils.parseEther(amount) : amount
+
+    console.log(`send amount ${parseAmount} to ${reciever}`)
+
     const transaction = await polyRosenContract.submitTransactions(
       process.env.ICE_POLY_CONTRACT,
       reciever,
@@ -81,6 +84,8 @@ const sendToHarmony = async (
     const parseAmount =
       from === "cosmos" ? ethers.utils.parseEther(amount) : amount
 
+    console.log(`send amount ${parseAmount} to ${reciever}`)
+
     const transaction = await harmonyRosenContract.submitTransactions(
       process.env.ICE_HAMONY_CONTRACT,
       reciever,
@@ -100,6 +105,10 @@ const sendToCosmos = async (reciever, amount) => {
   const mnemonic = process.env.ROSEN_MEMONIC
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic)
   const [accounts] = await wallet.getAccounts()
+
+  console.log(
+    `send amount ${Number(ethers.utils.formatEther(amount))} to ${reciever}`
+  )
 
   const registry = new Registry()
   registry.register(
@@ -160,9 +169,7 @@ polyProvider.on(
     const amount = decodeData[3].toString()
     const desChain = parseInt(topics[2], 16)
 
-    console.log(
-      `Send ${amount} token ${tokenContract} from ${sourceChain} to ${desChain}`
-    )
+    console.log(`Send token from chain ${sourceChain} to chain ${desChain}`)
 
     switch (desChain) {
       // Cosmos
@@ -198,9 +205,7 @@ harmonyProvider.on(
     const amount = decodeData[3].toString()
     const desChain = parseInt(topics[2], 16)
 
-    console.log(
-      `Send ${amount} token ${tokenContract} from ${sourceChain} to ${desChain}`
-    )
+    console.log(`Send token from chain ${sourceChain} to chain ${desChain}`)
 
     switch (desChain) {
       // Cosmos
