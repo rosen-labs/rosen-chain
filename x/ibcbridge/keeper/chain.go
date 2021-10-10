@@ -53,11 +53,16 @@ func (e ContractEndpoint) Mint(
 	srcChainId uint32,
 ) error {
 	fmt.Println("DEBUG : Mint evm token")
+	revAddress, uid, err := types.GetRevAddressAndUID(reciever)
+	if err != nil {
+		return err
+	}
 	ctx.EventManager().EmitEvents([]sdk.Event{
 		sdk.NewEvent(
 			types.EventTypeBridgingMint,
-
-			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
+			sdk.NewAttribute(types.AttributeKeyUID, uid),
+			sdk.NewAttribute(types.AttributeKeyEventName, types.EventTypeBridgingMint),
+			sdk.NewAttribute(types.AttributeKeyReciever, revAddress),
 			sdk.NewAttribute(types.AttributeKeyAmount, fmt.Sprintf("%d", amount)),
 			sdk.NewAttribute(types.AttributeKeyFee, fmt.Sprintf("%d", fee)),
 			sdk.NewAttribute(types.AttributeKeySrcChainId, fmt.Sprintf("%d", srcChainId)),
@@ -106,11 +111,16 @@ func (e CosmosDenomEndpoint) Mint(
 	}
 	fmt.Println("DEBUG : Send mint message success")
 
+	revAddress, uid, err := types.GetRevAddressAndUID(reciever)
+	if err != nil {
+		return err
+	}
 	ctx.EventManager().EmitEvents([]sdk.Event{
 		sdk.NewEvent(
 			types.EventTypeBridgingMint,
-
-			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
+			sdk.NewAttribute(types.AttributeKeyUID, uid),
+			sdk.NewAttribute(types.AttributeKeyEventName, types.EventTypeBridgingMint),
+			sdk.NewAttribute(types.AttributeKeyReciever, revAddress),
 			sdk.NewAttribute(types.AttributeKeyAmount, fmt.Sprintf("%d", amount)),
 			sdk.NewAttribute(types.AttributeKeyFee, fmt.Sprintf("%d", fee)),
 			sdk.NewAttribute(types.AttributeKeySrcChainId, fmt.Sprintf("%d", srcChainId)),
@@ -126,24 +136,55 @@ func (e CosmosDenomEndpoint) Mint(
 var chainMap = make(ChainMap)
 
 func init() {
-	chainMap[0] = Chain{ChainName: "Etherium", ChainId: 0, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
+	// chainMap[0] = Chain{ChainName: "Polygon", ChainId: 0, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
+	// chainMap[0].TokenEndpointMap[0] = ContractEndpoint{
+	// 	TokenName:     "ICE",
+	// 	CosmosChainId: "polygon",
+	// 	TokenId:       0,
+	// 	ChainId:       0,
+
+	// 	ContractAddress: "0x533d74323dea658087a9d5D00133d17891F12e8E",
+	// }
+
+	// chainMap[1] = Chain{ChainName: "XChain", ChainId: 1, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
+	// chainMap[1].TokenEndpointMap[0] = CosmosDenomEndpoint{
+	// 	TokenName:     "x",
+	// 	CosmosChainId: "x:0",
+	// 	TokenId:       0,
+	// 	ChainId:       1,
+
+	// 	Denom:     "token",
+	// 	ChannelID: "channel-0",
+	// }
+	chainMap[0] = Chain{ChainName: "Polygon", ChainId: 0, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
 	chainMap[0].TokenEndpointMap[0] = ContractEndpoint{
-		TokenName:     "x",
-		CosmosChainId: "eth:0",
+		TokenName:     "ICE",
+		CosmosChainId: "polygon",
 		TokenId:       0,
 		ChainId:       0,
 
-		ContractAddress: "0x9f834f87we023jf",
+		ContractAddress: "0x533d74323dea658087a9d5D00133d17891F12e8E",
 	}
 
-	chainMap[1] = Chain{ChainName: "XChain", ChainId: 1, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
+	chainMap[1] = Chain{ChainName: "ICE Chain", ChainId: 1, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
 	chainMap[1].TokenEndpointMap[0] = CosmosDenomEndpoint{
-		TokenName:     "x",
+		TokenName:     "ICE",
 		CosmosChainId: "x:0",
 		TokenId:       0,
 		ChainId:       1,
 
 		Denom:     "token",
-		ChannelID: "channel-0",
+		ChannelID: "channel-1",
 	}
+
+	chainMap[2] = Chain{ChainName: "Harmony", ChainId: 2, TokenEndpointMap: make(map[uint32]TokenEndpoint)}
+	chainMap[2].TokenEndpointMap[0] = ContractEndpoint{
+		TokenName:     "ICE",
+		CosmosChainId: "harmony",
+		TokenId:       0,
+		ChainId:       2,
+
+		ContractAddress: "0xf23Dc58ec64f163a0eFea6E84a3E6A8D8C9b6193",
+	}
+
 }
