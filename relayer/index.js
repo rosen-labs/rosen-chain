@@ -5,6 +5,7 @@ const { DirectSecp256k1HdWallet, Registry } = require("@cosmjs/proto-signing")
 const { SigningStargateClient, coins } = require("@cosmjs/stargate")
 const { MsgSendMsgMintRequest } = require("./constant/protos/tx.js")
 const WebSocket = require("ws")
+const BigNumber = require("bignumber.js/bignumber")
 
 const polyProvider = new ethers.providers.WebSocketProvider(
   process.env.POLY_WSS
