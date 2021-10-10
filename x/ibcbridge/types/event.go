@@ -3,6 +3,7 @@ package types
 const (
 	EventTypeBridgingMint = "bridging_mint"
 
+	AttributeKeyUID         = "UID"
 	AttributeKeyEventName   = "event_name"
 	AttributeKeyReciever    = "reciever"
 	AttributeKeyAmount      = "amount"

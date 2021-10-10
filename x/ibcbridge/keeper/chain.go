@@ -53,12 +53,16 @@ func (e ContractEndpoint) Mint(
 	srcChainId uint32,
 ) error {
 	fmt.Println("DEBUG : Mint evm token")
+	revAddress, uid, err := types.GetRevAddressAndUID(reciever)
+	if err != nil {
+		return err
+	}
 	ctx.EventManager().EmitEvents([]sdk.Event{
 		sdk.NewEvent(
 			types.EventTypeBridgingMint,
+			sdk.NewAttribute(types.AttributeKeyUID, uid),
 			sdk.NewAttribute(types.AttributeKeyEventName, types.EventTypeBridgingMint),
-			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
-			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
+			sdk.NewAttribute(types.AttributeKeyReciever, revAddress),
 			sdk.NewAttribute(types.AttributeKeyAmount, fmt.Sprintf("%d", amount)),
 			sdk.NewAttribute(types.AttributeKeyFee, fmt.Sprintf("%d", fee)),
 			sdk.NewAttribute(types.AttributeKeySrcChainId, fmt.Sprintf("%d", srcChainId)),
@@ -107,11 +111,16 @@ func (e CosmosDenomEndpoint) Mint(
 	}
 	fmt.Println("DEBUG : Send mint message success")
 
+	revAddress, uid, err := types.GetRevAddressAndUID(reciever)
+	if err != nil {
+		return err
+	}
 	ctx.EventManager().EmitEvents([]sdk.Event{
 		sdk.NewEvent(
 			types.EventTypeBridgingMint,
+			sdk.NewAttribute(types.AttributeKeyUID, uid),
 			sdk.NewAttribute(types.AttributeKeyEventName, types.EventTypeBridgingMint),
-			sdk.NewAttribute(types.AttributeKeyReciever, reciever),
+			sdk.NewAttribute(types.AttributeKeyReciever, revAddress),
 			sdk.NewAttribute(types.AttributeKeyAmount, fmt.Sprintf("%d", amount)),
 			sdk.NewAttribute(types.AttributeKeyFee, fmt.Sprintf("%d", fee)),
 			sdk.NewAttribute(types.AttributeKeySrcChainId, fmt.Sprintf("%d", srcChainId)),
