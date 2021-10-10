@@ -5,7 +5,6 @@ const { DirectSecp256k1HdWallet, Registry } = require("@cosmjs/proto-signing")
 const { SigningStargateClient, coins } = require("@cosmjs/stargate")
 const { MsgSendMsgMintRequest } = require("./constant/protos/tx.js")
 const WebSocket = require("ws")
-const BigNumber = require("bignumber.js/bignumber")
 
 const polyProvider = new ethers.providers.WebSocketProvider(
   process.env.POLY_WSS
@@ -43,38 +42,55 @@ const harmonyRosenContract = new ethers.Contract(
 )
 
 const sendToChainEvent = ethers.utils.id(
-  'SendToChain(address,address,string,uint256,uint256,uint256)'
+  "SendToChain(address,address,string,uint256,uint256,uint256)"
 )
 
-const sendToPolygon = async (tokenAddr, reciever, amount, fee = 0) => {
+const sendToPolygon = async (
+  tokenAddr,
+  reciever,
+  amount,
+  fee = 0,
+  from = "eth"
+) => {
   try {
+    const parseAmount =
+      from === "cosmos" ? ethers.utils.parseEther(amount) : amount
     const transaction = await polyRosenContract.submitTransactions(
       process.env.ICE_POLY_CONTRACT,
       reciever,
-      amount,
+      parseAmount,
       fee,
       { gasLimit: 280000 }
     )
 
     await transaction.wait()
-    console.log('Send to polygon success')
+    console.log("Send to polygon success")
   } catch (e) {
     console.error(e.message)
   }
 }
 
-const sendToHarmony = async (tokenAddr, reciever, amount, fee = 0) => {
+const sendToHarmony = async (
+  tokenAddr,
+  reciever,
+  amount,
+  fee = 0,
+  from = "eth"
+) => {
   try {
+    const parseAmount =
+      from === "cosmos" ? ethers.utils.parseEther(amount) : amount
+
     const transaction = await harmonyRosenContract.submitTransactions(
       process.env.ICE_HAMONY_CONTRACT,
       reciever,
-      amount,
+      parseAmount,
       fee,
       { gasLimit: 280000 }
     )
 
     await transaction.wait()
-    console.log('Send to harmony success')
+    console.log("Send to harmony success")
   } catch (e) {
     console.error(e.message)
   }
@@ -87,25 +103,25 @@ const sendToCosmos = async (reciever, amount) => {
 
   const registry = new Registry()
   registry.register(
-    '/rosenlabs.rosenchain.ibcbridge.MsgSendMsgMintRequest',
+    "/rosenlabs.rosenchain.ibcbridge.MsgSendMsgMintRequest",
     MsgSendMsgMintRequest
   )
   const options = {
     registry: registry,
   }
   const client = await SigningStargateClient.connectWithSigner(
-    'http://localhost:26659',
+    "http://localhost:26659",
     wallet,
     options
   )
 
   const value = {
     sender: accounts.address,
-    port: 'bridge',
-    channelID: 'channel-1',
+    port: "bridge",
+    channelID: "channel-1",
     timeoutTimestamp: (Date.now() + 60000) * 1000000,
     reciever: reciever,
-    amount: amount,
+    amount: Number(ethers.utils.formatEther(amount)),
     fee: 0,
     tokenId: 0,
     srcChainId: 0,
@@ -113,28 +129,28 @@ const sendToCosmos = async (reciever, amount) => {
   }
 
   const msg = {
-    typeUrl: '/rosenlabs.rosenchain.ibcbridge.MsgSendMsgMintRequest',
+    typeUrl: "/rosenlabs.rosenchain.ibcbridge.MsgSendMsgMintRequest",
     value,
   }
   const fee = {
-    amount: coins(1, 'token'),
-    gas: '180000',
+    amount: coins(1, "token"),
+    gas: "180000",
   }
 
   await client.signAndBroadcast(accounts.address, [msg], fee)
-  console.log('Send to cosmos success')
+  console.log("Send to cosmos success")
 }
 
-console.log('Start listen event on polygon')
+console.log("Start listen event on polygon")
 polyProvider.on(
   {
     address: process.env.ROSEN_POLY_CONTRACT,
     topics: [sendToChainEvent],
   },
-  async result => {
+  async (result) => {
     const { data, topics } = result
     const decodeData = ethers.utils.defaultAbiCoder.decode(
-      ['address', 'string', 'uint256', 'uint256'],
+      ["address", "string", "uint256", "uint256"],
       data
     )
 
@@ -163,16 +179,16 @@ polyProvider.on(
   }
 )
 
-console.log('Start listen event on harmony')
+console.log("Start listen event on harmony")
 harmonyProvider.on(
   {
     address: process.env.ROSEN_HAMONY_CONTRACT,
     topics: [sendToChainEvent],
   },
-  async result => {
+  async (result) => {
     const { data, topics } = result
     const decodeData = ethers.utils.defaultAbiCoder.decode(
-      ['address', 'string', 'uint256', 'uint256'],
+      ["address", "string", "uint256", "uint256"],
       data
     )
 
@@ -202,12 +218,12 @@ harmonyProvider.on(
 )
 
 // Rosen web socket section
-console.log('Start listen event on cosmos')
+console.log("Start listen event on cosmos")
 rosenWs.onopen = function () {
   rosenWs.send(
     JSON.stringify({
-      jsonrpc: '2.0',
-      method: 'subscribe',
+      jsonrpc: "2.0",
+      method: "subscribe",
       id: 0,
       params: {
         query: "tm.event='Tx' AND bridging_mint.event_name='bridging_mint'",
@@ -217,13 +233,13 @@ rosenWs.onopen = function () {
 }
 
 function convert(msg) {
-  const prefix = 'bridging_mint.'
+  const prefix = "bridging_mint."
   let result = {}
   for (const [key, value] of Object.entries(
     JSON.parse(msg.data).result.events
   )) {
     if (key.startsWith(prefix)) {
-      const newKey = key.replace(prefix, '')
+      const newKey = key.replace(prefix, "")
       result[newKey] = value[0]
     }
   }
@@ -236,12 +252,12 @@ rosenWs.onmessage = async function (msg) {
     switch (Number(dest_chain_id)) {
       // Polygon
       case Number(0):
-        await sendToPolygon(contract, reciever, amount, 0)
+        await sendToPolygon(contract, reciever, amount, 0, "cosmos")
         break
 
       // Harmony
       case Number(2):
-        await sendToHarmony(contract, reciever, amount, 0)
+        await sendToHarmony(contract, reciever, amount, 0, "cosmos")
         break
 
       default:
